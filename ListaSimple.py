@@ -1,5 +1,3 @@
-#Clase/Lista para manejar empresas
-
 from Empresa import Empresa
 
 
@@ -45,10 +43,10 @@ class ListaSimple():
                     break
             tmp=tmp.siguiente
 
-    def getEmpresa(self,nombre):
+    def getEmpresa(self,id):
         tmp=self.inicio
         while tmp is not None:
-            if tmp.nombre==nombre:
+            if tmp.id==id:
                 return tmp
             tmp=tmp.siguiente
         return None
