@@ -39,14 +39,14 @@ class Cola:
     #MOSTRAR  EL PRIMER CLIENTE EN LA COLA
     def primeroencola(self):
         if self.cabeza == None:
-            print("No hay ninguna orden en la cola")
+            print("No hay ningun cliente en la cola")
         else:
             return self.cabeza.data
 
     #VERIFICAR SI LA COLA ESTÁ VACÍA
     def ColaVacia(self):
         if self.cabeza == None:
-            print("No hay ninguna orden en la cola")
+            print("No hay ninguna cliente en la cola")
         else:
             return False
 
@@ -54,7 +54,7 @@ class Cola:
     #IMPRIMIR LA COLA DE CLIENTES
     def imprimirCola(self):
         print("----------------------------")
-        print("Las Ordenes en la cola son:")
+        print("Los clientes en la cola son:")
         print("----------------------------")
         temp=self.cabeza
         while temp != None:
