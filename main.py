@@ -5,10 +5,19 @@
 #-------------------------------------
 
 from xml.dom import minidom
+from xml.dom import minidom
+from ListaDoble import ListaDoble
+from ListaDobleEscritorios import ListaEscritorio
+from ListaSimple import ListaSimple
+from ClaseCola import Cola
+import xml.etree.ElementTree as ET
 import xml.etree.ElementTree as ET
 from ListaSimple import ListaSimple
 
-
+Lista_Empresas=ListaSimple()
+Lista_PuntosAtencion=ListaDoble()
+Lista_Escritorios=ListaEscritorio()
+cola=Cola()
 
     #def cargar_archivo(ruta):
         #tree=ET.parse(ruta)
@@ -18,8 +27,7 @@ from ListaSimple import ListaSimple
             #abreviatura = elemento.find('abreviatura').text
             #print('Nombre:' + nombre, 'Abreviatura:' + abreviatura)
 
-        
-
+    
 
         #for elemento in root.findall('empresa'):
             #empresas.crearEmpresa(elemento.attrib['id'],)
@@ -33,7 +41,6 @@ from ListaSimple import ListaSimple
 
 
 def menuprincipal():
-    Lista_Empresas=ListaSimple()
     print("                                             ")
     print("---------------------------------------------")
     print("MENU - SOLUCIONES GUATEMALTECAS S.A")
@@ -145,13 +152,59 @@ def menuprincipal():
 menuprincipal()
 
 
+def cargar_archivo(ruta,empresas,sucursales):
+    tree=ET.parse(ruta)
+    root=tree.getroot()
+
+    for empresa in root.findall('empresa'):
+        id = empresa.get('id')
+        nombre = empresa.find('nombre').text
+        abreviatura = empresa.find('abreviatura').text
+        empresas.añadirEmpresa(id,nombre,abreviatura)
+        print('Se añadió correctamente',id,nombre,abreviatura)
+    
+        for puntosatenc in empresa.iter('puntoAtencion'):
+            puntoAt=empresas.getEmpresa(id)
+            idpunto = puntosatenc.get('id')
+            nombrepunto = puntosatenc.find('nombre').text
+            direccion = puntosatenc.find('direccion').text
+            puntoAt.lista_puntoAtencion.insertarPuntoAtencion(idpunto,nombrepunto,direccion)
+            print('Se añade correctamente',idpunto,nombrepunto,direccion)
+        
+            for escritorio in puntosatenc.iter('escritorio'):
+                empresa=empresas.getEmpresa(id)
+                if empresa is None:
+                    print('> id incorrecto o no registrado')
+                else:
+                    sucursal = sucursales.getPuntoAtencion(idpunto)
+                    if sucursal is None:
+                        print('No existe esa sucursal para la empresa')
+                    else:
+                        idescritorio = escritorio.get('id')
+                        identificacionesc = escritorio.find('identificacion').text
+                        encargadoesc = escritorio.find('encargado').text
+                        sucursal.lista_escritorios.insertarEscritorio(idescritorio,identificacionesc,encargadoesc)
+                        print('Se añade correctamente',idescritorio,identificacionesc,encargadoesc)
+
+
+                  
+def cargar_archivoini(ruta2,clientes):
+    tree=ET.parse(ruta2)
+    root=tree.getroot()
+
+    for cliente in root.iter('cliente'):
+        dpi = cliente.get('dpi')
+        nombrecliente = cliente.find('nombre').text
+        datos = ('dpi:' + dpi + 'nombre: ' + nombrecliente)
+        clientes.encolar(datos)
+        print('Se añadió el cliente', datos)
+
 
 def menu():
     opcion=''
-    Lista_Empresas=ListaSimple()
-    while opcion!='9':
-        print("-------------------------------------------------")
-        print("        MENU PARA CONFIGURACION MANUAL DE EMPRESAS    ")
+    while opcion!='10':
+        print("---------------------------------------------")
+        print("MENU - SOLUCIONES GUATEMALTECAS S.A")
         print('1. Ingresar Empresa')
         print('2. Selección de Empresas')
         print('3. Eliminar Empresa')
@@ -159,7 +212,13 @@ def menu():
         print('5. Ver puntos de atención por Empresas')
         print('6. Crear escritorios')
         print('7. Ver escritorios en sucursal de Empresa')
-        print('8. Regresar a menu principal')
+        print('8. Crear una transaccion para una empresa ')
+        print('9. Mostrar transacciones para empresas ')
+        print('10. Cargar Archivo Configuracion Sistema')
+        print('11. Crear Clientes')
+        print('12. Ver Clientes')
+        print('13. Cargar Archivo Configuracion Inicial')
+        print('14. Regresar a menu principal')
         print("---------------------------------------------")
         opcion=input('Ingrese una opcion: ')
         print(opcion)
@@ -230,11 +289,59 @@ def menu():
                     print('----------Escritorios disponibles para ',empresa.nombre,'en',sucursal.nombre,'------')
                     empresa.lista_escritorios.mostrarEscritorio()
 
+        elif opcion =='8':
+            id=input('Ingresar id de empresa: ')
+            empresa=Lista_Empresas.getEmpresa(id)
+            if empresa is None:
+                print('> id incorrecto o no registrado')
+            else:
+                idTransaccion=input('Ingresar id de la transaccion: ')
+                nombreTransaccion=input('Ingrese nombre de la transaccion: ')
+                tiempoTransaccion=input('Ingrese el tiempo de atencion para la transaccion (minutos): ')
+                empresa.lista_transacciones.insertarTransaccion(idTransaccion,nombreTransaccion,tiempoTransaccion)            
+
+        elif opcion =='9':
+            n=input('Ingresar id de la empresa: ' )
+            empresa=Lista_Empresas.getEmpresa(n)
+            if empresa is None:
+                print('> id incorrecto o no registrado')
+            else:
+                print('Empresa: ',empresa.nombre)
+                print('----------Transacciones disponibles para ',empresa.nombre,':-------')
+                empresa.lista_transacciones.mostrarTransacciones()
+
+        elif opcion =='10':
+            Filename=input('Ingresar nombre de archivo: ')
+            file='./'+Filename
+            cargar_archivo(file, Lista_Empresas, Lista_PuntosAtencion)
+            return menu()
+        
 
 
-        elif opcion=='8': 
-            return menuprincipal()  
+        elif opcion=='11':
+            dpi=input('Ingrese el dpi del cliente: ')
+            nombrecliente=input('Ingrese el nombre del cliente: ')
+            cola.encolar('dpi: ' +  dpi + '   nombre: ' + nombrecliente)
+            return menu()
+
+        elif opcion =='12':
+            cola.imprimirCola()
+            return menu()
+
+
+
+        elif opcion=='13':
+            Filename=input('Ingresar nombre de archivo: ')
+            file='./'+Filename
+            cargar_archivoini(file,cola)
+            return menu()
+
+
+        elif opcion=='14': 
+            exit()  
+
         else:
             break
 
 menu()
+
