@@ -1,5 +1,7 @@
-from mimetypes import init
+
 from PuntoAtencion import PuntoAtencion
+
+#Lista para puntos de atención
 
 class ListaDoble():
     def __init__(self):

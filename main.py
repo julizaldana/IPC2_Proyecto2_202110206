@@ -4,155 +4,28 @@
 #PROYECTO 2
 #-------------------------------------
 
-from xml.dom import minidom
+from cgitb import text
 from xml.dom import minidom
 from ListaDoble import ListaDoble
 from ListaDobleEscritorios import ListaEscritorio
 from ListaSimple import ListaSimple
 from ClaseCola import Cola
+from ListaEscritoriosActivos import ListaEscritorioActivo
+from ColaClientes import ColaCliente
 import xml.etree.ElementTree as ET
-import xml.etree.ElementTree as ET
-from ListaSimple import ListaSimple
+from colorama import Fore, Back, Style
 
 Lista_Empresas=ListaSimple()
 Lista_PuntosAtencion=ListaDoble()
 Lista_Escritorios=ListaEscritorio()
+Lista_EscritoriosActivos=ListaEscritorioActivo()
+colacliente=ColaCliente()
 cola=Cola()
 
-    #def cargar_archivo(ruta):
-        #tree=ET.parse(ruta)
-        #root=tree.getroot()
-        #for elemento in root.findall('empresa'):
-            #nombre= elemento.find('nombre').text
-            #abreviatura = elemento.find('abreviatura').text
-            #print('Nombre:' + nombre, 'Abreviatura:' + abreviatura)
 
-    
+#FUNCION PARA CARGAR ARCHIVO DE SISTEMA DE CONFIGURACION DE EMPRESAS
 
-        #for elemento in root.findall('empresa'):
-            #empresas.crearEmpresa(elemento.attrib['id'],)
-           # print('Empresa', elemento.attrib['id'],' ha sido insertado')
-            #for subelemento in elemento.iter('pelicula'):
-                #empresa=empresas.getEmpresa(elemento.attrib['id'])
-                #empresa.lista_puntoAtencion.insertarEmpresa(subelemento.attrib['id'],subelemento.attrib['nombre'],subelemento.attrib['direccion'],subelemento.text)
-                #print('El punto de atención ',subelemento.attrib['id'],' es de la empresa ',empresa.id)
-
-
-
-
-def menuprincipal():
-    print("                                             ")
-    print("---------------------------------------------")
-    print("MENU - SOLUCIONES GUATEMALTECAS S.A")
-    print("1. Configuracion de empresas")
-    print("2. Seleccion de empresa y puntos de atencion")
-    print("3. Manejo de puntos de atencion")
-    print("4. Información Estudiante")
-    print("5. Salir de aplicación")
-    print("---------------------------------------------")
-    respuesta = input("Ingrese una opcion: ")
-        
-
-    if respuesta == '1':
-        return lambda:menu()
-
-        '''print()
-        print("                                             ")
-        print("---------------------------------------------")
-        print("       CONFIGURACION DE EMPRESAS             ")
-        print("1. Cargar archivo de configuracion de sistema")
-        print("2. Crear una nueva empresa")
-        print("3. Cargar archivo con configuracion inicial")
-        print("4. Regresar al menu principal")
-        print("5. Ver empresas")
-        print("---------------------------------------------")
-        respempresa = input("Ingrese una opcion:  ")'''
-
-        #if respempresa =='1':
-            
-
-            #Filename=input('Ingrese nombre de archivo: ')
-            #file='C:/Users/juliz/OneDrive/Escritorio/Proyecto2/IPC2_Proyecto2_202110206/ConfigSys.xml'
-            #cargar_archivo(file)
-            #return menuprincipal()
-
-            #Filename=input('Ingresar nombre de archivo: ')
-            #file='./'+Filename
-            #documentoxml = minidom.parse(file)
-            # empresas = documentoxml.getElementsByTagName("listaEmpresas")
-            #print("----------------------------------------------------------")
-            #print("            Lista de Empresas                 ")
-            #print("----------------------------------------------------------")
-            #for empresa in empresas:
-                #id = empresa.getElementsByTagName("empresa id")[0]                    
-                #nombre = empresa.getElementsByTagName("nombre")[0]
-                ##print("id:" + str(id.firstChild.data) + "Nombre: " + str(nombre.firstChild.data) + "Abreviatura: " + str(abreviatura.firstChild.data))
-       # elif respempresa == '2':
-           # c=input('Ingrese un id para una empresa: ')
-            #n=input('Ingrese un nombre para la empresa: ')
-           # o=input('Ingrese una abreviatura para la empresa: ')
-            #Lista_Empresas.añadirEmpresa(c,n,o)
-
-
-        #elif respempresa == '3':
-            #file2='C:/Users/juliz/OneDrive/Escritorio/Proyecto2/IPC2_Proyecto2_202110206/ConfigInit.xml'
-            #cargar_archivo(file2)
-
-
-
-        
-        #elif respempresa =='4':
-            #return menuprincipal()
-
-
-        #elif respempresa=='5':
-            #Lista_Empresas.imprimirEmpresas()
-
-
-
-
-    elif respuesta == '2':
-        return menuprincipal()
-
-        '''print("Selecciona una empresa:  ")
-        inputempresa = input()
-
-        if inputempresa == '1':
-            print('Escoger punto de atención: ')
-            print('Muestra cantidad de escritorios activos, cant. escritorios inactivos, clientes en espera de atención')
-            escritorioactivado = input()
-
-            if escritorioactivado =='activar':
-                print("Escritorio inactivo pasarlo a activo")
-
-            if escritorioactivado == 'desactivar':
-                print("Escritorio activo pasarlo a inactivo")
-
-            #Atender cliente -> El primer cliente que entra a la cola será atendido.
-            #Solicitud de atención -> agregar un cliente que solicita atención, permitir transaccion que desee realiza
-            #Simular actividad del punto de atención -> se atiende a todos en la cola.
-            #Mostrar clientes atendidos.
-            #Por cada escritorio, mostrar número de clientes atendidos'''
-
-    elif respuesta =='3':
-        print('')
-        return menuprincipal()
-
-
-
-    elif respuesta == '4':
-        print("NOMBRE: Julio Alejandro Zaldaña Ríos")
-        print("CARNET: 202110206")
-        return menuprincipal()
-
-    elif respuesta == '5':
-        exit()
-
-
-menuprincipal()
-
-
-def cargar_archivo(ruta,empresas,sucursales):
+def cargar_archivo(ruta,empresas):
     tree=ET.parse(ruta)
     root=tree.getroot()
 
@@ -172,39 +45,62 @@ def cargar_archivo(ruta,empresas,sucursales):
             print('Se añade correctamente',idpunto,nombrepunto,direccion)
         
             for escritorio in puntosatenc.iter('escritorio'):
-                empresa=empresas.getEmpresa(id)
-                if empresa is None:
-                    print('> id incorrecto o no registrado')
-                else:
-                    sucursal = sucursales.getPuntoAtencion(idpunto)
-                    if sucursal is None:
-                        print('No existe esa sucursal para la empresa')
-                    else:
-                        idescritorio = escritorio.get('id')
-                        identificacionesc = escritorio.find('identificacion').text
-                        encargadoesc = escritorio.find('encargado').text
-                        sucursal.lista_escritorios.insertarEscritorio(idescritorio,identificacionesc,encargadoesc)
-                        print('Se añade correctamente',idescritorio,identificacionesc,encargadoesc)
+                sucursal = puntoAt.lista_puntoAtencion.getPuntoAtencion(idpunto)
+                idescritorio = escritorio.get('id')
+                identificacionesc = escritorio.find('identificacion').text
+                encargadoesc = escritorio.find('encargado').text
+                sucursal.lista_escritorios.insertarEscritorio(idescritorio,identificacionesc,encargadoesc)
+                print('Se añade correctamente',idescritorio,identificacionesc,encargadoesc)
+
+                for transaccion in empresa.iter('transaccion'):
+                    transacc = empresas.getEmpresa(id)
+                    idtransaccion = transaccion.get('id')
+                    nombretransaccion = transaccion.find('nombre').text
+                    tiempotransaccion = transaccion.find('tiempoAtencion').text
+                    transacc.lista_transacciones.insertarTransaccion(idtransaccion,nombretransaccion,tiempotransaccion)
+
+            
+#FUNCION PARA CARGAR ARCHIVO DE SISTEMA PARA INICIALIZACION DE CLIENTES
 
 
-                  
-def cargar_archivoini(ruta2,clientes):
+                 
+def cargar_archivoini(ruta2,clientes,empresas,sucursal):
     tree=ET.parse(ruta2)
     root=tree.getroot()
+
+
+    for config in root.findall('configInicial'):
+        id = config.get('idEmpresa')
+        idpunto = config.get('idPunto')
+        puntoAt = empresas.getEmpresa(id)
+        sucursal = puntoAt.lista_puntoAtencion.getPuntoAtencion(idpunto)
+
+        for escritoriosactivos in config.iter('escritorio'):
+            idEscritorioActivo = escritoriosactivos.get('idEscritorio')
+            sucursal.lista_escritoriosactivos.insertarEscritorioActivo(idEscritorioActivo)
+            print('Se añade correctamente',idEscritorioActivo)
 
     for cliente in root.iter('cliente'):
         dpi = cliente.get('dpi')
         nombrecliente = cliente.find('nombre').text
-        datos = ('dpi:' + dpi + 'nombre: ' + nombrecliente)
-        clientes.encolar(datos)
-        print('Se añadió el cliente', datos)
+    
+        for transaccioncl in cliente.iter('transaccion'):
+            transacciones = transaccioncl.get('idTransaccion')
+            datos = ('dpi: ' + dpi + '      ' + 'nombre:  ' + nombrecliente + '      ' + 'transacciones: ' + transacciones + '||')
+            clientes.encolar(datos)
+            print('Se añadió el cliente ', datos)
+
+
+
+
+
 
 
 def menu():
     opcion=''
-    while opcion!='10':
+    while opcion!='19':
         print("---------------------------------------------")
-        print("MENU - SOLUCIONES GUATEMALTECAS S.A")
+        print("     MENU - SOLUCIONES GUATEMALTECAS S.A     ")
         print('1. Ingresar Empresa')
         print('2. Selección de Empresas')
         print('3. Eliminar Empresa')
@@ -215,10 +111,15 @@ def menu():
         print('8. Crear una transaccion para una empresa ')
         print('9. Mostrar transacciones para empresas ')
         print('10. Cargar Archivo Configuracion Sistema')
-        print('11. Crear Clientes')
-        print('12. Ver Clientes')
+        print('---------------------------------------------')
+        print('11. Crear Cliente')
+        print('12. Ver Cola de Clientes')
         print('13. Cargar Archivo Configuracion Inicial')
-        print('14. Regresar a menu principal')
+        print('14. Activar Escritorio')
+        print('15. Desactivar Escritorio')
+        print('16. Mostrar Escritorios Activos')
+        print('17. Atender Cliente en Escritorio')
+        print('18. Salir ')
         print("---------------------------------------------")
         opcion=input('Ingrese una opcion: ')
         print(opcion)
@@ -233,10 +134,10 @@ def menu():
             Lista_Empresas.imprimirEmpresas()
 
         elif opcion=='3':
-            x=input('Ingresar nombre de la empresa que se requiere eliminar')
+            x=input(Fore.BLUE+'Ingresar nombre de la empresa que se requiere eliminar')
             Lista_Empresas.eliminarEmpresa(x)
         elif opcion=='4':
-            id=input('Ingresar id de empresa: ')
+            id=input(Fore.GREEN+'Ingresar id de empresa: ')
             empresa=Lista_Empresas.getEmpresa(id)
             if empresa is None:
                 print('> id incorrecto o no registrado')
@@ -246,13 +147,13 @@ def menu():
                 direccionPA=input('Ingrese direccion del punto de atencion: ')
                 empresa.lista_puntoAtencion.insertarPuntoAtencion(idPA,nombrePA,direccionPA)
         elif opcion=='5':
-            y=input('Ingresar id de la empresa: ' )
+            y=input(Fore.BLUE+'Ingresar id de la empresa: ' )
             empresa=Lista_Empresas.getEmpresa(y)
             if empresa is None:
-                print('> id incorrecto o no registrado')
+                print(Fore.RED+'> id incorrecto o no registrado')
             else:
-                print('Empresa: ',empresa.nombre)
-                print('----------Sucursales para',empresa.nombre,'------')
+                print(Fore.GREEN+'Empresa: ',empresa.nombre)
+                print(Fore.GREEN+'----------Sucursales para',empresa.nombre,'------')
                 empresa.lista_puntoAtencion.mostrarPuntoAtencion()
 
 
@@ -260,37 +161,40 @@ def menu():
             z=input('Ingrese id de la empresa: ')
             empresa=Lista_Empresas.getEmpresa(z)
             if empresa is None:
-                print('> id incorrecto o no registrado')
+                print(Fore.RED+'> id incorrecto o no registrado')
             else:
                 w=input('Ingrese id de una sucursal para la empresa')
                 sucursal = empresa.lista_puntoAtencion.getPuntoAtencion(w)
                 
                 if sucursal is None:
-                    print('No existe esa sucursal para la empresa')
+                    print('No existe esa sucursal para la empresa: ')
                 else:
                     idEscritorio=input('Ingrese un id para el escritorio: ')
                     identificacionEsc=input('Ingrese un numero de identificación para el escritorio: ')
                     encargadoEsc=input('Ingrese el nombre del encargado del escritorio: ')
-                    empresa.lista_escritorios.insertarEscritorio(idEscritorio,identificacionEsc,encargadoEsc)  
+                    sucursal.lista_escritorios.insertarEscritorio(idEscritorio,identificacionEsc,encargadoEsc)  
 
         elif opcion=='7':
             z=input('Ingrese id de la empresa: ')
             empresa=Lista_Empresas.getEmpresa(z)
             if empresa is None:
-                print('> id incorrecto o no registrado')
+                print(Fore.RED+'> id incorrecto o no registrado')
             else:
-                w=input('Ingrese id de una sucursal para la empresa')
+                w=input('Ingrese id de una sucursal para la empresa: ')
                 sucursal = empresa.lista_puntoAtencion.getPuntoAtencion(w)
                 
                 if sucursal is None:
                     print('No existe esa sucursal para la empresa')
                 else:
-                    print('Los escritorios para la empresa: ',empresa.nombre, 'en', sucursal.nombre)
-                    print('----------Escritorios disponibles para ',empresa.nombre,'en',sucursal.nombre,'------')
-                    empresa.lista_escritorios.mostrarEscritorio()
+                    print(Fore.GREEN+'Los escritorios para la empresa: ',empresa.nombre, 'en', sucursal.nombre)
+                    print(Fore.GREEN+'----------Escritorios disponibles para ',empresa.nombre,'en',sucursal.nombre,'------')
+                    sucursal.lista_escritorios.mostrarEscritorio()
+
+
+
 
         elif opcion =='8':
-            id=input('Ingresar id de empresa: ')
+            id=input(Fore.GREEN+'Ingresar id de empresa: ')
             empresa=Lista_Empresas.getEmpresa(id)
             if empresa is None:
                 print('> id incorrecto o no registrado')
@@ -301,47 +205,160 @@ def menu():
                 empresa.lista_transacciones.insertarTransaccion(idTransaccion,nombreTransaccion,tiempoTransaccion)            
 
         elif opcion =='9':
-            n=input('Ingresar id de la empresa: ' )
+            n=input(Fore.BLUE+'Ingresar id de la empresa: ' )
             empresa=Lista_Empresas.getEmpresa(n)
             if empresa is None:
-                print('> id incorrecto o no registrado')
+                print(Fore.RED+'> id incorrecto o no registrado')
             else:
-                print('Empresa: ',empresa.nombre)
-                print('----------Transacciones disponibles para ',empresa.nombre,':-------')
+                print(Fore.GREEN+'Empresa: ',empresa.nombre)
+                print(Fore.GREEN+'----------Transacciones disponibles para ',empresa.nombre,':-------')
                 empresa.lista_transacciones.mostrarTransacciones()
+
 
         elif opcion =='10':
             Filename=input('Ingresar nombre de archivo: ')
             file='./'+Filename
-            cargar_archivo(file, Lista_Empresas, Lista_PuntosAtencion)
+            cargar_archivo(file, Lista_Empresas)
             return menu()
         
+
+# ------------------------------- MANEJO ARCHIVO CLIENTES -------------------------------
 
 
         elif opcion=='11':
             dpi=input('Ingrese el dpi del cliente: ')
             nombrecliente=input('Ingrese el nombre del cliente: ')
-            cola.encolar('dpi: ' +  dpi + '   nombre: ' + nombrecliente)
+            transaccionarealizar=input('Ingrese una transacción a realizar por el cliente: ')
+            nuevocliente=('dpi: ' + dpi + '      ' + 'nombre:  ' + nombrecliente + '      ' + 'transacciones: ' + transaccionarealizar + '||')
+            cola.encolar(nuevocliente)
             return menu()
 
         elif opcion =='12':
             cola.imprimirCola()
             return menu()
 
-
-
         elif opcion=='13':
             Filename=input('Ingresar nombre de archivo: ')
             file='./'+Filename
-            cargar_archivoini(file,cola)
+            cargar_archivoini(file,cola,Lista_Empresas,Lista_EscritoriosActivos)
             return menu()
 
 
-        elif opcion=='14': 
+        elif opcion=='14':
+            print('-----------------------------')
+            print('    ACTIVAR ESCRITORIO       ')
+            l=input('Ingrese id de la empresa: ')
+            empresa=Lista_Empresas.getEmpresa(l)
+            if empresa is None:
+                print(Fore.RED+'> id incorrecto o no registrado')
+            else:
+                v=input('Ingrese id de una sucursal para la empresa: ')
+                sucursal = empresa.lista_puntoAtencion.getPuntoAtencion(v)
+                
+                if sucursal is None:
+                    print('No existe esa sucursal para la empresa: ')
+                else:
+                    print(Fore.GREEN+'Los escritorios para la empresa: ',empresa.nombre, 'en', sucursal.nombre)
+                    print(Fore.GREEN+'----------Escritorios disponibles para ',empresa.nombre,'en',sucursal.nombre,'------')
+                    sucursal.lista_escritorios.mostrarEscritorio()
+                    r=input('Ingrese id del escritorio a activar: ')
+                    escritorio = sucursal.lista_escritorios.getEscritorio(r)
+
+                    if escritorio is None:
+                        print('No escribió correctamente el escritorio. ')
+                    else:
+                        print('Escritorio ',escritorio.id, 'ha sido activado')
+                        idescactivo=escritorio.id
+                        sucursal.lista_escritoriosactivos.insertarEscritorioActivo(idescactivo)
+
+
+        elif opcion=='15':
+            print('-----------------------------')
+            print('    DESACTIVAR ESCRITORIO       ')
+            l=input('Ingrese id de la empresa: ')
+            empresa=Lista_Empresas.getEmpresa(l)
+            if empresa is None:
+                print(Fore.RED+'> id incorrecto o no registrado')
+            else:
+                v=input('Ingrese id de una sucursal para la empresa: ')
+                sucursal = empresa.lista_puntoAtencion.getPuntoAtencion(v)
+                
+                if sucursal is None:
+                    print('No existe esa sucursal para la empresa: ')
+                else:
+                    print(Fore.GREEN+'----------Los escritorios activos para la empresa: ',empresa.nombre, 'en', sucursal.nombre,'------------')
+                    sucursal.lista_escritoriosactivos.mostrarEscritorioActivo()
+                    r=input('Ingrese id del escritorio a desactivar: ')
+                    escritorio = sucursal.lista_escritoriosactivos.getEscritorioActivo(r)
+
+                    if escritorio is None:
+                        print('No escribió correctamente el escritorio activo. ')
+                    else:
+                        print('Escritorio ',escritorio.id, 'ha sido desactivado')
+                        iddesactivado=escritorio.id
+                        sucursal.lista_escritoriosactivos.eliminarEscritorioActivo(iddesactivado)
+
+
+
+        elif opcion=='16':
+            print('-----------------------------')
+            print('    ESCRITORIOS ACTIVOS      ')
+            l=input('Ingrese id de la empresa: ')
+            empresa=Lista_Empresas.getEmpresa(l)
+            if empresa is None:
+                print(Fore.RED+'> id incorrecto o no registrado')
+            else:
+                v=input('Ingrese id de una sucursal para la empresa: ')
+                sucursal = empresa.lista_puntoAtencion.getPuntoAtencion(v)
+                
+                if sucursal is None:
+                    print('No existe esa sucursal para la empresa: ')
+                else:
+                    print(Fore.GREEN+'----------Los escritorios activos para la empresa: ',empresa.nombre, 'en', sucursal.nombre,'------------')
+                    sucursal.lista_escritoriosactivos.mostrarEscritorioActivo()
+
+
+
+
+        elif opcion =='17':
+            print('------------------------------------------------')
+            print('    MANEJO DE CLIENTES EN ESCRITORIOS ACTIVOS  ')
+            l=input('Ingrese id de la empresa: ')
+            empresa=Lista_Empresas.getEmpresa(l)
+            if empresa is None:
+                print(Fore.RED+'> id incorrecto o no registrado')
+            else:
+                v=input('Ingrese id de una sucursal para la empresa: ')
+                sucursal = empresa.lista_puntoAtencion.getPuntoAtencion(v)
+                
+                if sucursal is None:
+                    print('No existe esa sucursal para la empresa: ')
+                else:
+                    print(Fore.GREEN+'----------Los escritorios activos para la empresa: ',empresa.nombre, 'en', sucursal.nombre,'------------')
+                    sucursal.lista_escritoriosactivos.mostrarEscritorioActivo()
+                    r=input('Ingrese id del escritorio para atender cliente de la cola: ')
+                    escritorio = sucursal.lista_escritoriosactivos.getEscritorioActivo(r)
+
+                    if escritorio is None:
+                        print('No escribió correctamente el escritorio activo. ')
+                    else:
+                        clienteatendido = cola.desencolar()
+                        print('Se atenderá en el escritorio ',escritorio.id, 'al cliente con datos: ' ,clienteatendido)
+                        ask=input('¿Terminar de atender al cliente? S/N: ')
+                        
+                        if ask =='S':
+                            print(clienteatendido, 'fue atendido correctamente!')
+                            return menu()
+                        else:
+                            return menu()
+
+
+
+        elif opcion=='18': 
             exit()  
 
         else:
             break
 
+    return menu()
 menu()
-

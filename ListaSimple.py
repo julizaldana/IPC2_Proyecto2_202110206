@@ -1,5 +1,6 @@
 from Empresa import Empresa
 
+#Lista para empresas
 
 class ListaSimple():
     def __init__(self):

@@ -8,7 +8,6 @@ class Node:
         self.anterior = anterior
 
 
-
 class Cola:
 
     def __init__(self):
@@ -40,25 +39,25 @@ class Cola:
     #MOSTRAR  EL PRIMER CLIENTE EN LA COLA
     def primeroencola(self):
         if self.cabeza == None:
-            print("No hay ningun cliente en la cola")
+            print("No hay ninguna orden en la cola")
         else:
             return self.cabeza.data
 
     #VERIFICAR SI LA COLA ESTÁ VACÍA
     def ColaVacia(self):
         if self.cabeza == None:
-            print("No hay ninguna cliente en la cola")
+            print("No hay ninguna orden en la cola")
         else:
             return False
 
 
     #IMPRIMIR LA COLA DE CLIENTES
     def imprimirCola(self):
-        print("----------------------------")
-        print("Los clientes en la cola son:")
-        print("----------------------------")
+        print("---------------------------------")
+        print("  CLIENTES EN LA COLA:      ")
+        print("--------------------------------")
         temp=self.cabeza
         while temp != None:
-            print(temp.data,end="   le sigue       ")
+            print(temp.data)
             temp=temp.siguiente
 

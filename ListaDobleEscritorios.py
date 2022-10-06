@@ -1,5 +1,8 @@
 from Escritorio import Escritorio
 
+
+#Lista para escritorios
+
 class ListaEscritorio():
     def __init__(self):
         self.inicio=None
@@ -20,3 +23,13 @@ class ListaEscritorio():
         while tmp is not None:
             print('id: ',tmp.id,' Identificacion: ',tmp.identificacion,' Encargado: ',tmp.encargado)
             tmp=tmp.siguiente
+
+
+    def getEscritorio(self, id):
+        tmp=self.inicio
+        while tmp is not None:
+            if tmp.id==id:
+                return tmp
+            tmp=tmp.siguiente
+        return None
+
